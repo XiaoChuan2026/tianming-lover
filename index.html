@@ -1,0 +1,557 @@
+<!-- v2026-07-27-lover v1 你适合什么样的恋人 · 5维度×20题×12原型·最近邻匹配·浪漫夜主题 -->
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>你适合什么样的恋人？｜天命情书</title>
+<style>
+  :root{
+    --bg1:#221634; --bg2:#160f28;
+    --gold:#e8c27a; --gold-soft:#f3dca8; --gold-text:#f3dca8;
+    --rose:#e3a7ad; --rose-soft:#f0c9cd;
+    --text:#f5edff; --muted:#b6a9d0;
+    --card:rgba(255,255,255,0.06); --card-line:rgba(232,194,122,0.22);
+  }
+  html{ min-height:100%; }
+  body{
+    font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;
+    background-color:#160f28;
+    background-image:
+      radial-gradient(1.5px 1.5px at 8% 12%, rgba(255,255,255,.8), transparent),
+      radial-gradient(1px 1px at 15% 28%, rgba(255,255,255,.5), transparent),
+      radial-gradient(2px 2px at 22% 8%, rgba(243,220,168,.55), transparent),
+      radial-gradient(1px 1px at 30% 35%, rgba(255,255,255,.45), transparent),
+      radial-gradient(1.5px 1.5px at 38% 18%, rgba(255,255,255,.75), transparent),
+      radial-gradient(1px 1px at 45% 44%, rgba(255,255,255,.45), transparent),
+      radial-gradient(2px 2px at 52% 10%, rgba(243,220,168,.5), transparent),
+      radial-gradient(1px 1px at 60% 30%, rgba(255,255,255,.5), transparent),
+      radial-gradient(1.5px 1.5px at 68% 16%, rgba(255,255,255,.75), transparent),
+      radial-gradient(1px 1px at 75% 40%, rgba(255,255,255,.45), transparent),
+      radial-gradient(2px 2px at 82% 12%, rgba(243,220,168,.5), transparent),
+      radial-gradient(1px 1px at 90% 32%, rgba(255,255,255,.45), transparent),
+      radial-gradient(1.5px 1.5px at 95% 20%, rgba(255,255,255,.7), transparent),
+      radial-gradient(1px 1px at 10% 52%, rgba(255,255,255,.45), transparent),
+      radial-gradient(1.5px 1.5px at 18% 64%, rgba(255,255,255,.65), transparent),
+      radial-gradient(1px 1px at 26% 78%, rgba(255,255,255,.45), transparent),
+      radial-gradient(2px 2px at 34% 58%, rgba(243,220,168,.45), transparent),
+      radial-gradient(1px 1px at 42% 86%, rgba(255,255,255,.45), transparent),
+      radial-gradient(1.5px 1.5px at 50% 70%, rgba(255,255,255,.65), transparent),
+      radial-gradient(1px 1px at 58% 90%, rgba(255,255,255,.45), transparent),
+      radial-gradient(2px 2px at 66% 62%, rgba(243,220,168,.45), transparent),
+      radial-gradient(1px 1px at 74% 82%, rgba(255,255,255,.45), transparent),
+      radial-gradient(1.5px 1.5px at 82% 70%, rgba(255,255,255,.65), transparent),
+      radial-gradient(1px 1px at 90% 88%, rgba(255,255,255,.45), transparent),
+      radial-gradient(1.5px 1.5px at 95% 75%, rgba(255,255,255,.6), transparent),
+      linear-gradient(180deg, #241a3d 0%, #160f28 100%);
+    background-attachment: fixed;
+    color:var(--text);
+    min-height:100vh;
+    margin:0;
+    display:flex; justify-content:center;
+    padding:26px 16px 52px;
+    box-sizing:border-box;
+    -webkit-tap-highlight-color:transparent;
+  }
+  #app{ width:100%; max-width:480px; }
+  .title{
+    font-size:27px; font-weight:800; text-align:center; line-height:1.35; margin:6px 0 10px;
+    background:linear-gradient(90deg,var(--gold-soft),var(--gold));
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
+  .sub{ text-align:center; color:var(--muted); font-size:14px; line-height:1.7; margin-bottom:26px; }
+  .start-card{
+    background:var(--card); border:1px solid var(--card-line); border-radius:18px;
+    padding:30px 22px; text-align:center; margin-top:18px;
+  }
+  .start-card .badge{
+    display:inline-block; font-size:12px; color:var(--gold-text); border:1px solid var(--card-line);
+    border-radius:999px; padding:5px 14px; margin-bottom:16px; letter-spacing:1px;
+  }
+  .start-card p{ color:var(--muted); font-size:14px; line-height:1.8; margin:0 0 22px; }
+  .progress{ height:6px; background:rgba(255,255,255,0.08); border-radius:999px; overflow:hidden; margin:14px 0 20px; }
+  .progress > i{ display:block; height:100%; width:0; background:linear-gradient(90deg,var(--gold),var(--rose)); transition:width .35s ease; }
+  .q-count{ text-align:center; color:var(--muted); font-size:13px; margin-bottom:4px; letter-spacing:1px; }
+  .q-text{ font-size:19px; font-weight:700; text-align:center; line-height:1.5; margin:6px 4px 22px; }
+  .opt{
+    display:block; width:100%; text-align:left; background:var(--card); border:1px solid var(--card-line);
+    color:var(--text); border-radius:14px; padding:15px 16px; margin:11px 0; font-size:15.5px; line-height:1.55;
+    cursor:pointer; transition:.18s; font-family:inherit;
+  }
+  .opt:active, .opt:hover{ border-color:var(--gold); background:rgba(232,194,122,0.12); transform:translateY(-1px); }
+  .opt.sel{ border-color:var(--gold); background:rgba(232,194,122,0.18); box-shadow:0 0 0 1px var(--gold) inset; }
+  .next-btn{
+    display:none; width:100%; margin-top:14px; padding:15px; border:none; border-radius:14px;
+    background:linear-gradient(90deg,var(--gold-soft),var(--gold)); color:#2a1c10; font-size:16px; font-weight:800;
+    cursor:pointer; font-family:inherit; box-shadow:0 6px 18px rgba(232,194,122,0.25);
+  }
+  .next-btn.show{ display:block; }
+  .result-btn{
+    display:block; width:100%; margin:8px auto 0; padding:17px; border:none; border-radius:16px;
+    background:linear-gradient(90deg,var(--gold-soft),var(--gold)); color:#2a1c10; font-size:18px; font-weight:800;
+    cursor:pointer; font-family:inherit; box-shadow:0 8px 22px rgba(232,194,122,0.3);
+  }
+  /* 结果页 */
+  .r-head{ text-align:center; margin:4px 0 18px; }
+  .r-badge{ font-size:12px; color:var(--gold-text); border:1px solid var(--card-line); border-radius:999px; padding:5px 14px; letter-spacing:1px; }
+  .r-name{ font-size:25px; font-weight:800; margin:14px 0 6px;
+    background:linear-gradient(90deg,var(--gold-soft),var(--rose-soft));
+    -webkit-background-clip:text; background-clip:text; color:transparent; }
+  .r-tag{ color:var(--muted); font-size:14.5px; line-height:1.6; }
+  .r-match{ text-align:center; font-size:13px; color:var(--muted); margin:14px 0 4px; }
+  .r-match b{ font-size:30px; color:var(--gold); font-weight:800; }
+  .sec-title{ font-size:15px; font-weight:700; color:var(--gold-text); margin:22px 0 12px; display:flex; align-items:center; }
+  .sec-title::before{ content:""; width:4px; height:15px; background:var(--gold); border-radius:2px; margin-right:8px; }
+  .card{ background:var(--card); border:1px solid var(--card-line); border-radius:14px; padding:16px; line-height:1.75; font-size:14.5px; color:var(--text); }
+  .card.why{ background:rgba(232,194,122,0.10); }
+  .bar-row{ margin:13px 0; }
+  .bar-top{ display:flex; justify-content:space-between; font-size:14px; margin-bottom:5px; }
+  .bar-top .v{ color:var(--gold); font-weight:700; }
+  .bar{ height:9px; background:rgba(255,255,255,0.08); border-radius:999px; overflow:hidden; }
+  .bar > i{ display:block; height:100%; border-radius:999px; background:linear-gradient(90deg,var(--gold),var(--rose)); }
+  .bar-note{ font-size:12.5px; color:var(--muted); margin-top:5px; line-height:1.6; }
+  .kw{ display:flex; flex-wrap:wrap; gap:8px; margin:4px 0 2px; }
+  .kw span{ font-size:12.5px; color:var(--gold-text); border:1px solid var(--card-line); border-radius:999px; padding:4px 11px; }
+  .sec-sub{ font-size:13px; color:var(--muted); margin:2px 0 10px; line-height:1.6; }
+  .sub-card{ background:var(--card); border:1px solid var(--card-line); border-radius:14px; padding:14px 16px; text-align:left; margin:10px 0; }
+  .sub-card .sn{ font-size:16px; font-weight:700; color:var(--gold-text); margin-bottom:3px; }
+  .sub-card .st{ font-size:13px; color:var(--muted); }
+  .sub-card .sm{ float:right; font-size:13px; color:var(--gold); font-weight:700; }
+  .retake{ display:block; width:100%; margin:26px auto 0; padding:14px; background:none; border:1px solid var(--card-line); color:var(--muted); border-radius:14px; font-size:14px; cursor:pointer; font-family:inherit; }
+  .foot{ text-align:center; color:var(--muted); font-size:11.5px; margin-top:22px; line-height:1.7; opacity:.8; }
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script>
+/* ============ 5 个关系维度 ============ */
+const AXES = [
+  {k:'A', label:'亲密需求',
+    note:v=> v>=70?'你很需要亲密陪伴，独处太久会没安全感。': v>=40?'你享受陪伴，也珍视自己的空间。':'你更看重独立，黏太紧反而想逃。'},
+  {k:'B', label:'情感表达',
+    note:v=> v>=70?'你习惯把爱说出口，也需要明确的情感回应。': v>=40?'你愿意表达，但更看重分寸。':'你偏内敛，爱多用行动而非言语。'},
+  {k:'C', label:'关系节奏',
+    note:v=> v>=70?'你爱心跳加速的浓烈，怕平淡。': v>=40?'你偏好有张有弛。':'你向往松弛安稳、慢热的舒服。'},
+  {k:'D', label:'被呵护偏好',
+    note:v=> v>=70?'你希望在关系里被照顾、被兜底。': v>=40?'你享受互相宠。':'你更想要平等独立，不喜欢被管。'},
+  {k:'E', label:'成长张力',
+    note:v=> v>=70?'你希望伴侣推着你一起变好。': v>=40?'你接受互相督促。':'你更想要被接纳，不想被改造。'}
+];
+
+/* ============ 20 题（每维度 4 题，单题 4 选项带维度分值） ============ */
+const QUESTIONS = [
+  // —— A 亲密需求 ——
+  {q:'你最理想的相处距离是？', axis:'A', opts:[
+    {t:'几乎形影不离，黏在一起最安心', v:{A:100}},
+    {t:'天天见面，但各自有空间', v:{A:66}},
+    {t:'一周两三次就够，需要独处充电', v:{A:33}},
+    {t:'越喜欢越想保持距离，怕太快', v:{A:0}}
+  ]},
+  {q:'异地恋对你来说？', axis:'A', opts:[
+    {t:'完全不行，见不到人就没安全感', v:{A:100}},
+    {t:'勉强可以，靠频繁联系维持', v:{A:66}},
+    {t:'还好，各自忙各自的也行', v:{A:33}},
+    {t:'反而舒服，距离产生美', v:{A:0}}
+  ]},
+  {q:'你希望对方多久主动找你一次？', axis:'A', opts:[
+    {t:'随时都在、消息秒回最好', v:{A:100}},
+    {t:'每天有质量的交流就行', v:{A:66}},
+    {t:'几天一次也 OK', v:{A:33}},
+    {t:'不主动找我也行，我不依赖', v:{A:0}}
+  ]},
+  {q:'朋友说"你谈恋爱就像消失了"——你？', axis:'A', opts:[
+    {t:'确实，恋爱优先级最高', v:{A:100}},
+    {t:'会少一些社交但尽量保持', v:{A:66}},
+    {t:'恋爱、工作、朋友都要顾', v:{A:33}},
+    {t:'恋爱只是生活的一部分', v:{A:0}}
+  ]},
+  // —— B 情感表达 ——
+  {q:'你更喜欢对方怎么表达爱？', axis:'B', opts:[
+    {t:'直接说"我爱你"、认真夸我', v:{B:100}},
+    {t:'写长文、认真聊感受', v:{B:66}},
+    {t:'默默做事、照顾我', v:{B:33}},
+    {t:'不用说，默契就行', v:{B:0}}
+  ]},
+  {q:'你自己闹情绪时？', axis:'B', opts:[
+    {t:'立刻说出来，要对方接住', v:{B:100}},
+    {t:'会表达，但等合适时机', v:{B:66}},
+    {t:'自己消化，不想麻烦人', v:{B:33}},
+    {t:'基本不表现出来', v:{B:0}}
+  ]},
+  {q:'纪念日 / 节日你期待？', axis:'B', opts:[
+    {t:'必须有仪式感和告白', v:{B:100}},
+    {t:'有心意的小惊喜就好', v:{B:66}},
+    {t:'平平淡淡过也行', v:{B:33}},
+    {t:'最好不过，省事', v:{B:0}}
+  ]},
+  {q:'吵架时你通常？', axis:'B', opts:[
+    {t:'当场把话都说开', v:{B:100}},
+    {t:'想说但怕伤感情，斟酌着说', v:{B:66}},
+    {t:'冷战，等自己气消', v:{B:33}},
+    {t:'回避，不想正面冲突', v:{B:0}}
+  ]},
+  // —— C 关系节奏 ——
+  {q:'你期待的爱情画风是？', axis:'C', opts:[
+    {t:'轰轰烈烈、心跳加速', v:{C:100}},
+    {t:'有甜有张力、偶尔拉扯', v:{C:66}},
+    {t:'平稳舒服就好', v:{C:33}},
+    {t:'像老友一样松弛', v:{C:0}}
+  ]},
+  {q:'周末你更想？', axis:'C', opts:[
+    {t:'来场说走就走的旅行 / 去嗨', v:{C:100}},
+    {t:'尝试新餐厅、新展览', v:{C:66}},
+    {t:'在家窝着看剧、做饭', v:{C:33}},
+    {t:'各自安静待着', v:{C:0}}
+  ]},
+  {q:'你对"惊喜"的态度？', axis:'C', opts:[
+    {t:'越多越好，爱刺激', v:{C:100}},
+    {t:'偶尔有情调不错', v:{C:66}},
+    {t:'可有可无', v:{C:33}},
+    {t:'计划被打乱会烦躁', v:{C:0}}
+  ]},
+  {q:'你觉得感情里最重要的底色是？', axis:'C', opts:[
+    {t:'激情和新鲜感', v:{C:100}},
+    {t:'心跳与踏实的平衡', v:{C:66}},
+    {t:'稳定和安全感', v:{C:33}},
+    {t:'舒服自在', v:{C:0}}
+  ]},
+  // —— D 被呵护偏好 ——
+  {q:'你更希望对方是？', axis:'D', opts:[
+    {t:'强势一点，替我做决定', v:{D:100}},
+    {t:'多数时候照顾我', v:{D:66}},
+    {t:'平等商量', v:{D:33}},
+    {t:'各自独立、互不打扰', v:{D:0}}
+  ]},
+  {q:'生病 / 低谷时你最想要？', axis:'D', opts:[
+    {t:'被全程照顾、有人兜底', v:{D:100}},
+    {t:'有人陪着就好', v:{D:66}},
+    {t:'自己扛，但要对方在身边', v:{D:33}},
+    {t:'别管我，我自己来', v:{D:0}}
+  ]},
+  {q:'在付出这件事上，你更？', axis:'D', opts:[
+    {t:'更享受被宠', v:{D:100}},
+    {t:'互相宠', v:{D:66}},
+    {t:'我付出更多也开心', v:{D:33}},
+    {t:'量入为出，不喜欢黏腻', v:{D:0}}
+  ]},
+  {q:'你眼中"被爱"的样子是？', axis:'D', opts:[
+    {t:'对方把我当小孩宠', v:{D:100}},
+    {t:'被细心体贴地照顾', v:{D:66}},
+    {t:'被尊重和理解', v:{D:33}},
+    {t:'给我自由就是爱', v:{D:0}}
+  ]},
+  // —— E 成长张力 ——
+  {q:'你希望伴侣在事业 / 自我成长上？', axis:'E', opts:[
+    {t:'推着我一起变好', v:{E:100}},
+    {t:'互相督促', v:{E:66}},
+    {t:'各自发展、互不干涉', v:{E:33}},
+    {t:'别卷了，开心就好', v:{E:0}}
+  ]},
+  {q:'面对你的缺点，你希望对方？', axis:'E', opts:[
+    {t:'直接指出来帮我改', v:{E:100}},
+    {t:'温和提醒', v:{E:66}},
+    {t:'接纳就好，别纠结', v:{E:33}},
+    {t:'根本别提，我爱怎样怎样', v:{E:0}}
+  ]},
+  {q:'你更被哪种人吸引？', axis:'E', opts:[
+    {t:'有野心、有冲劲的', v:{E:100}},
+    {t:'上进又松弛的', v:{E:66}},
+    {t:'安稳知足的', v:{E:33}},
+    {t:'躺平享受生活的', v:{E:0}}
+  ]},
+  {q:'你认为好的爱情应该？', axis:'E', opts:[
+    {t:'让人脱胎换骨', v:{E:100}},
+    {t:'彼此成就', v:{E:66}},
+    {t:'互相陪伴度过日常', v:{E:33}},
+    {t:'怎么舒服怎么来', v:{E:0}}
+  ]}
+];
+
+/* ============ 12 种恋人原型（5 维度目标画像 p） ============ */
+const TYPES = {
+  safe:{
+    name:'温柔港湾 · 安全型恋人', tag:'把你稳稳托住的人',
+    kw:['稳定感','情绪兜底','细水长流','不玩心跳游戏'],
+    fit:'你渴望被稳稳接住，而不是一场心跳过山车。',
+    desc:'TA 像一面安静的湖，不吵不闹，却让你踏实。你需要的安全感、被重视感，TA 都用日常的细节给足——记得你的小习惯，在你低落时默默出现。',
+    together:'你们的日子是热汤、晚安电话和"我在"。未必惊艳，但永远不会让你慌。',
+    pit:'注意别把对方当情绪兜底无限索取；也要给 TA 同样的回应，否则再稳的人也会累。',
+    spot:'看 TA 是否记得你的偏好、在你低落时先行动而非说教——这是安全型的基本功。',
+    p:{A:95,B:75,C:18,D:82,E:22}
+  },
+  equal:{
+    name:'燃情挚友 · 势均力敌型', tag:'和你火花四溅、棋逢对手的伴侣',
+    kw:['旗鼓相当','高频沟通','共同成长','有张力'],
+    fit:'你要的不是依靠，而是一个能接住你全部能量的人。',
+    desc:'TA 是你的对手也是队友，能和你争论也能和你并肩。你们的关系里有辩论、有默契，也有彼此成就的爽感。',
+    together:'你们会一起做大事、聊到深夜，在碰撞里越靠越近。',
+    pit:'都太要强容易硬碰硬，记得留一个"服软"的出口，别让胜负盖过感情。',
+    spot:'看 TA 是否尊重你的观点、输了也不恼——势均力敌的前提是彼此欣赏。',
+    p:{A:55,B:85,C:70,D:30,E:85}
+  },
+  peer:{
+    name:'智性共鸣 · 知己型恋人', tag:'思想同频、灵魂共振的知己',
+    kw:['精神契合','各自独立','深度对话','不黏腻'],
+    fit:'你最怕无聊和黏腻，能和你聊到一块儿比甜言蜜语重要。',
+    desc:'TA 不靠秒回和告白拴住你，而是用见识和默契留住你。你们各自精彩，靠近是因为"聊得来"，不是因为离不开。',
+    together:'你们会分享一本书、一个观点、一段安静的并肩，精神上极其富足。',
+    pit:'别让"聊得来"掩盖现实磨合；再同频也要落地到生活细节。',
+    spot:'看 TA 是否尊重你的边界、不查岗不黏人，却总能在关键话题上接住你。',
+    p:{A:30,B:35,C:30,D:25,E:90}
+  },
+  guardian:{
+    name:'守护骑士 · 宠溺型恋人', tag:'主动扛起一切、把你当小孩宠的人',
+    kw:['主动兜底','强势宠爱','给你作主','安全感拉满'],
+    fit:'你乐意被照顾，也享受有人替你拿主意的感觉。',
+    desc:'TA 喜欢"我来"——规划、决策、挡掉麻烦，统统包了。你只管做回小孩，被宠着就好。',
+    together:'你负责可爱，TA 负责撑伞；大事小事都有人扛，你很少需要硬撑。',
+    pit:'长期单方面被照顾容易失衡，也要偶尔"反过来宠 TA"，让 TA 被需要。',
+    spot:'看 TA 是否在你犹豫时直接给方案、且愿意为你让步——宠是主动的，不是被迫的。',
+    p:{A:88,B:45,C:40,D:98,E:28}
+  },
+  free:{
+    name:'自由随风 · 旅伴型恋人', tag:'不束缚彼此、陪你浪迹天涯的人',
+    kw:['给空间','一起冒险','不黏人','松弛'],
+    fit:'你最怕被关系勒住，能一起玩、又互不打扰才舒服。',
+    desc:'TA 不查岗、不索求秒回，自己也能过得精彩。你们像两阵风，偶尔交汇、各自自由。',
+    together:'你们会临时起意去远方，也会各自安静很久不联系却不觉疏远。',
+    pit:'太散容易散，定期制造"共同记忆"很重要，别让自由变成疏离。',
+    spot:'看 TA 是否尊重你的独处、自己也有热爱的事——独立的人才能陪你走远。',
+    p:{A:20,B:55,C:90,D:15,E:50}
+  },
+  confidant:{
+    name:'细腻知己 · 深谈型恋人', tag:'懂你情绪、愿意深夜长谈的人',
+    kw:['高共情','情绪细腻','长谈','被看见'],
+    fit:'你需要"被懂"，一个眼神就能接住你情绪的人最戳你。',
+    desc:'TA 敏感、会读空气，你还没开口 TA 就知道你不对劲。你们的关系靠源源不断的"说真话"维系。',
+    together:'你们会在深夜聊到天亮，把脆弱摊开也不怕被评判。',
+    pit:'都太敏感容易内耗，学会直说"我没事"或"我需要你"，别让对方猜。',
+    spot:'看 TA 是否记得你说过的细节、能说出你没说出口的情绪——被看见才是你的刚需。',
+    p:{A:80,B:90,C:25,D:55,E:45}
+  },
+  rock:{
+    name:'稳健基石 · 细水长流型', tag:'踏实可靠、平淡见真情的伴侣',
+    kw:['可靠','慢热','长期主义','不折腾'],
+    fit:'你厌倦戏剧化，稳定、可预期才是你心里的"好"。',
+    desc:'TA 不浪漫爆炸，但说到做到、情绪稳。和你在一起像有了定海神针，日子平平淡淡却越品越甜。',
+    together:'你们慢慢来，规划、存款、未来都一步步落地，是能把日子过厚的人。',
+    pit:'太稳可能少了点火花，偶尔主动制造小浪漫，别让关系彻底"静音"。',
+    spot:'看 TA 是否信守承诺、情绪不反复——可靠是 TA 最性感的地方。',
+    p:{A:60,B:30,C:15,D:45,E:25}
+  },
+  ally:{
+    name:'进取同盟 · 事业拍档型', tag:'和你一起搞钱搞事业、向上生长的人',
+    kw:['目标感','互相成就','并肩作战','现实向'],
+    fit:'你敬重有野心的人，能一起往上走的关系才带劲。',
+    desc:'TA 不是来拖你后腿的，是来和你组队的。你们聊规划、拼结果，把爱情过成"我们 vs 世界"。',
+    together:'你们会一起复盘、一起冲目标，彼此是最好的人生合伙人。',
+    pit:'别让事业盖过感情，留出专属的"只谈情不说事"时间。',
+    spot:'看 TA 是否有自己的目标、并为你的成长真心高兴——同盟的前提是各自都强。',
+    p:{A:40,B:60,C:60,D:30,E:95}
+  },
+  romantic:{
+    name:'浪漫诗人 · 仪式感型', tag:'把日子过成诗、仪式感满满的人',
+    kw:['仪式感','高频表达','甜','氛围感'],
+    fit:'你吃"被重视"这一套，用心意和告白把你喂饱才满足。',
+    desc:'TA 把恋爱当作品来经营：手写信、纪念日、突然的鲜花。你要的"被爱感"，TA 用源源不断的浪漫给足。',
+    together:'你们的日常有惊喜、有氛围，谈恋爱像一直被追求。',
+    pit:'浪漫要落地到人品，别被甜言冲昏头；也要回以同样的用心，别只当接收端。',
+    spot:'看 TA 是否记得日期、愿意为你花心思——仪式感对 TA 是爱的语言。',
+    p:{A:85,B:95,C:80,D:55,E:50}
+  },
+  strategist:{
+    name:'冷静谋略 · 定海神针型', tag:'理性克制、关键时刻给你定海神针的人',
+    kw:['理性','情绪稳','有主见','关键时刻靠得住'],
+    fit:'你怕情绪化内耗，一个能冷静兜底、帮你理清局面的人最让你安心。',
+    desc:'TA 话不多，但每句有用；你慌的时候 TA 不慌，三两下把问题拆清楚。你们的关系靠"靠谱"而非"热烈"。',
+    together:'你负责感受世界，TA 负责稳住底盘；大事临头你知道背后有人。',
+    pit:'太克制可能显得冷，主动要一句"你在就好"，别让 TA 误以为你不需要温度。',
+    spot:'看 TA 是否在你慌乱时先解决问题而非先评判——稳，是 TA 的爱法。',
+    p:{A:35,B:25,C:20,D:45,E:60}
+  },
+  nurturer:{
+    name:'暖心煮夫/煮妇 · 烟火型', tag:'用柴米油盐宠你、把家照顾妥帖的人',
+    kw:['顾家','生活感','体贴','烟火气'],
+    fit:'你向往"有人等你回家"的踏实，生活里的照顾比口号更打动你。',
+    desc:'TA 把爱做进一日三餐里：记得你不吃葱、天冷煮姜茶、家里永远整洁温暖。你要的被爱，藏在烟火气里。',
+    together:'你们的日子是晚饭香、一起逛超市、把小家一点点填满。',
+    pit:'照顾别变成单方面劳务，也要看见并感谢 TA 的付出，别当成理所当然。',
+    spot:'看 TA 是否自然地把你放进生活细节里——对 TA 来说，爱就是"把你照顾好"。',
+    p:{A:72,B:52,C:32,D:70,E:35}
+  },
+  adventurer:{
+    name:'灵魂冒险家 · 疯玩型', tag:'带你看世界、一起疯一起沉淀的人',
+    kw:['热爱生活','一起体验','开放','能量高'],
+    fit:'你怕闷，一个能带你体验世界、一起疯一起沉淀的人才对味。',
+    desc:'TA 对生活有好奇心，旅行、新事物、深度体验样样来。和 TA 在一起，日子永远有下一站。',
+    together:'你们会一起出发、一起撞墙也一起笑，把平凡活成故事。',
+    pit:'体验多了也要落地，别让"一直玩"回避掉该面对的现实课题。',
+    spot:'看 TA 是否对世界保持热情、也愿意带了你一起——对 TA，爱是"带你去看看"。',
+    p:{A:40,B:65,C:95,D:30,E:75}
+  }
+};
+
+/* ============ 状态与流程 ============ */
+let cur = 0;
+const ans = {};
+
+function start(){
+  cur = 0;
+  for(const k in ans) delete ans[k];
+  const app = document.getElementById('app');
+  app.innerHTML = `
+    <div class="start-card">
+      <div class="badge">天命情书 · 恋人匹配</div>
+      <div class="title" style="font-size:24px">你适合<br>什么样的恋人？</div>
+      <p>20 道真实关系题，从「亲密需求 / 情感表达 / 关系节奏 / 被呵护偏好 / 成长张力」五个维度，为你算出最契合的恋人原型，并告诉你：为什么是你、TA 长什么样、你们在一起会怎样、以及现实里怎么认出 TA。</p>
+      <button class="result-btn" onclick="renderQ()">开始测试</button>
+    </div>`;
+}
+
+function renderQ(){
+  const q = QUESTIONS[cur];
+  const app = document.getElementById('app');
+  const total = QUESTIONS.length;
+  const pct = Math.round((cur)/total*100);
+  let html = `
+    <div class="q-count">第 ${cur+1} / ${total} 题</div>
+    <div class="progress"><i style="width:${pct}%"></i></div>
+    <div class="q-text">${q.q}</div>`;
+  q.opts.forEach((o, i)=>{
+    const sel = ans[cur]===i ? ' sel' : '';
+    html += `<button class="opt${sel}" onclick="choose(${i})">${o.t}</button>`;
+  });
+  const last = cur === total-1;
+  if(ans[cur] !== undefined){
+    if(last){
+      html += `<button class="result-btn" onclick="finish()" style="margin-top:8px">查看结果</button>`;
+    } else {
+      html += `<button class="next-btn show" onclick="next()">下一题</button>`;
+    }
+  } else {
+    html += `<button class="next-btn" id="navBtn" onclick="${last?'finish()':'next()'}">${last?'查看结果':'下一题'}</button>`;
+  }
+  app.innerHTML = html;
+}
+
+function choose(i){
+  ans[cur] = i;
+  // 重新渲染以显示选中态与按钮
+  const opts = document.querySelectorAll('.opt');
+  opts.forEach((el,idx)=>{ el.classList.toggle('sel', idx===i); });
+  const nav = document.getElementById('navBtn');
+  const last = cur === QUESTIONS.length-1;
+  if(nav){
+    nav.classList.add('show');
+    nav.textContent = last ? '查看结果' : '下一题';
+    nav.setAttribute('onclick', last ? 'finish()' : 'next()');
+  } else {
+    // 已渲染过按钮，确保存在
+    renderQ();
+  }
+}
+
+function next(){
+  if(ans[cur] === undefined) return;
+  cur++;
+  if(cur >= QUESTIONS.length){ finish(); return; }
+  renderQ();
+}
+
+function finish(){
+  // 防御：缺答则跳到该题
+  for(let k=0;k<QUESTIONS.length;k++){
+    if(ans[k]===undefined){ cur=k; renderQ(); return; }
+  }
+  const sc = {A:0,B:0,C:0,D:0,E:0};
+  QUESTIONS.forEach((q,ki)=>{
+    const idx = ans[ki];
+    const opt = q.opts[idx];
+    if(!opt || !opt.v) return;
+    for(const kk in opt.v){ sc[kk] += opt.v[kk]; }
+  });
+  // 每维度 4 题取平均
+  AXES.forEach(a=>{ sc[a.k] = Math.round(sc[a.k]/4); });
+
+  const DMAX = Math.sqrt(5*100*100);
+  const ranked = Object.keys(TYPES).map(key=>{
+    const p = TYPES[key].p;
+    let d = 0;
+    AXES.forEach(a=>{ const diff = sc[a.k]-p[a.k]; d += diff*diff; });
+    d = Math.sqrt(d);
+    const sim = Math.max(58, Math.min(99, Math.round(100*(1 - d/DMAX))));
+    return {key, d, sim};
+  }).sort((x,y)=> x.d - y.d);
+
+  renderResult(sc, ranked[0], ranked[1]);
+}
+
+function whyText(sc, mainKey){
+  const sorted = AXES.slice().sort((a,b)=> sc[b.k]-sc[a.k]);
+  const t1=sorted[0], t2=sorted[1], lo=sorted[4];
+  return `你的关系画像里，<b>${t1.label} ${sc[t1.k]}</b> 与 <b>${t2.label} ${sc[t2.k]}</b> 最突出，而 <b>${lo.label} ${sc[lo.k]}</b> 偏低——${TYPES[mainKey].fit}`;
+}
+
+function barsHTML(sc){
+  let h = '';
+  AXES.forEach(a=>{
+    const v = sc[a.k];
+    h += `
+      <div class="bar-row">
+        <div class="bar-top"><span>${a.label}</span><span class="v">${v}</span></div>
+        <div class="bar"><i style="width:${v}%"></i></div>
+        <div class="bar-note">${a.note(v)}</div>
+      </div>`;
+  });
+  return h;
+}
+
+function renderResult(sc, main, second){
+  const T = TYPES[main.key];
+  const S = TYPES[second.key];
+  const app = document.getElementById('app');
+  app.innerHTML = `
+    <div class="r-head">
+      <div class="r-badge">天命情书 · 你的恋人原型</div>
+      <div class="r-name">${T.name}</div>
+      <div class="r-tag">${T.tag}</div>
+      <div class="r-match">与你的契合度 <b>${main.sim}%</b></div>
+    </div>
+
+    <div class="sec-title">你的关系画像</div>
+    <div class="sec-sub">五项维度由你的真实作答算出，是这份匹配的依据：</div>
+    ${barsHTML(sc)}
+
+    <div class="sec-title">为什么是你</div>
+    <div class="card why">${whyText(sc, main.key)}</div>
+
+    <div class="sec-title">TA 是什么样的恋人</div>
+    <div class="card">${T.desc}</div>
+    <div class="kw">${T.kw.map(k=>`<span>${k}</span>`).join('')}</div>
+
+    <div class="sec-title">你们在一起会</div>
+    <div class="card">${T.together}</div>
+
+    <div class="sec-title">要留意的雷区</div>
+    <div class="card">${T.pit}</div>
+
+    <div class="sec-title">现实里怎么认出 TA</div>
+    <div class="card">${T.spot}</div>
+
+    <div class="sec-title">你的第二适配恋人</div>
+    <div class="sub-card">
+      <span class="sm">契合度 ${second.sim}%</span>
+      <div class="sn">${S.name}</div>
+      <div class="st">${S.tag}</div>
+    </div>
+
+    <button class="retake" onclick="start()">重新测试</button>
+    <div class="foot">本测试为独立内容，仅供娱乐与自我觉察参考。<br>天命情书 · 你适合什么样的恋人？</div>
+  `;
+  window.scrollTo(0,0);
+}
+
+start();
+</script>
+</body>
+</html>
