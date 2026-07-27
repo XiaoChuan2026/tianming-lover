@@ -1,4 +1,4 @@
-<!-- v2026-07-27-lover v2 你适合什么样的恋人 · 5维度×20题×12原型·淡粉+玫瑰金主题(内部页与海报统一) -->
+<!-- v2026-07-27-lover v3 你适合什么样的恋人 · 5维度×20题×12原型·淡粉+玫瑰金·左右圆圈导航·更淡粉 -->
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -16,7 +16,7 @@
   html{ min-height:100%; }
   body{
     font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;
-    background-color:#ffd9e8;
+    background-color:#fff3f7;
     background-image:
       radial-gradient(1.5px 1.5px at 8% 12%, rgba(255,255,255,.9), transparent),
       radial-gradient(1px 1px at 15% 28%, rgba(255,255,255,.6), transparent),
@@ -43,7 +43,7 @@
       radial-gradient(1.5px 1.5px at 82% 70%, rgba(255,255,255,.75), transparent),
       radial-gradient(1px 1px at 90% 88%, rgba(255,255,255,.55), transparent),
       radial-gradient(1.5px 1.5px at 95% 75%, rgba(255,255,255,.7), transparent),
-      linear-gradient(180deg, #ffe3ee 0%, #ffc2d8 100%);
+      linear-gradient(180deg, #fff0f5 0%, #ffe2ee 100%);
     background-attachment: fixed;
     color:var(--text);
     min-height:100vh;
@@ -91,6 +91,16 @@
     background:linear-gradient(90deg,var(--gold-soft),var(--gold)); color:#2a1c10; font-size:18px; font-weight:800;
     cursor:pointer; font-family:inherit; box-shadow:0 8px 22px rgba(194,94,140,0.35);
   }
+  .nav-row{ display:flex; align-items:center; justify-content:center; gap:16px; margin-top:20px; }
+  .nav-circle{
+    width:54px; height:54px; border-radius:50%; border:2px solid var(--gold);
+    background:rgba(255,255,255,0.7); color:var(--gold); font-size:30px; line-height:1;
+    cursor:pointer; display:flex; align-items:center; justify-content:center; font-family:inherit; transition:.15s;
+  }
+  .nav-circle:active{ transform:scale(0.93); }
+  .nav-circle:disabled{ opacity:0.32; cursor:default; border-color:var(--muted); color:var(--muted); background:rgba(255,255,255,0.4); }
+  .nav-circle[aria-label="完成"]{ background:linear-gradient(135deg,var(--gold-soft),var(--gold)); color:#fff; border-color:var(--gold); }
+  .nav-hint{ font-size:13px; color:var(--muted); min-width:128px; text-align:center; }
   /* 结果页 */
   .r-head{ text-align:center; margin:4px 0 18px; }
   .r-badge{ font-size:12px; color:var(--gold-text); border:1px solid var(--card-line); border-radius:999px; padding:5px 14px; letter-spacing:1px; }
@@ -413,6 +423,8 @@ function renderQ(){
   const app = document.getElementById('app');
   const total = QUESTIONS.length;
   const pct = Math.round((cur)/total*100);
+  const last = cur === total-1;
+  const answered = ans[cur] !== undefined;
   let html = `
     <div class="q-count">第 ${cur+1} / ${total} 题</div>
     <div class="progress"><i style="width:${pct}%"></i></div>
@@ -421,34 +433,28 @@ function renderQ(){
     const sel = ans[cur]===i ? ' sel' : '';
     html += `<button class="opt${sel}" onclick="choose(${i})">${o.t}</button>`;
   });
-  const last = cur === total-1;
-  if(ans[cur] !== undefined){
-    if(last){
-      html += `<button class="result-btn" onclick="finish()" style="margin-top:8px">查看结果</button>`;
-    } else {
-      html += `<button class="next-btn show" onclick="next()">下一题</button>`;
-    }
-  } else {
-    html += `<button class="next-btn" id="navBtn" onclick="${last?'finish()':'next()'}">${last?'查看结果':'下一题'}</button>`;
-  }
+  html += `
+    <div class="nav-row">
+      <button class="nav-circle" onclick="prevQ()" ${cur===0?'disabled':''} aria-label="上一题">‹</button>
+      <span class="nav-hint" id="navHint">${answered ? (last?'完成测试 · 点右圈':'已选好 · 可前进') : '请选择一个答案'}</span>
+      <button class="nav-circle" id="navRight" onclick="${last?'finish()':'next()'}" ${answered?'':'disabled'} aria-label="${last?'完成':'下一题'}">${last?'✓':'›'}</button>
+    </div>`;
   app.innerHTML = html;
 }
 
 function choose(i){
   ans[cur] = i;
-  // 重新渲染以显示选中态与按钮
-  const opts = document.querySelectorAll('.opt');
-  opts.forEach((el,idx)=>{ el.classList.toggle('sel', idx===i); });
-  const nav = document.getElementById('navBtn');
-  const last = cur === QUESTIONS.length-1;
-  if(nav){
-    nav.classList.add('show');
-    nav.textContent = last ? '查看结果' : '下一题';
-    nav.setAttribute('onclick', last ? 'finish()' : 'next()');
-  } else {
-    // 已渲染过按钮，确保存在
-    renderQ();
-  }
+  document.querySelectorAll('.opt').forEach((el,idx)=> el.classList.toggle('sel', idx===i));
+  const right = document.getElementById('navRight');
+  if(right) right.removeAttribute('disabled');
+  const hint = document.getElementById('navHint');
+  if(hint) hint.textContent = (cur===QUESTIONS.length-1) ? '完成测试 · 点右圈' : '已选好 · 可前进';
+}
+
+function prevQ(){
+  if(cur===0) return;
+  cur--;
+  renderQ();
 }
 
 function next(){
