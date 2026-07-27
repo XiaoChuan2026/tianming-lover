@@ -1,4 +1,4 @@
-<!-- v2026-07-27-lover v3 你适合什么样的恋人 · 5维度×20题×12原型·淡粉+玫瑰金·左右圆圈导航·更淡粉 -->
+<!-- v2026-07-27-lover v4 你适合什么样的恋人 · 5维度×20题×12原型·淡粉+玫瑰金·左右圆圈导航·答完自动跳下一题 -->
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -403,6 +403,7 @@ const TYPES = {
 
 /* ============ 状态与流程 ============ */
 let cur = 0;
+let advTimer = null;
 const ans = {};
 
 function start(){
@@ -449,15 +450,21 @@ function choose(i){
   if(right) right.removeAttribute('disabled');
   const hint = document.getElementById('navHint');
   if(hint) hint.textContent = (cur===QUESTIONS.length-1) ? '完成测试 · 点右圈' : '已选好 · 可前进';
+  // 答完自动跳下一题（保留短暂高亮反馈）
+  if(advTimer) clearTimeout(advTimer);
+  const last = cur === QUESTIONS.length-1;
+  advTimer = setTimeout(()=>{ if(advTimer){ advTimer=null; last ? finish() : next(); } }, 380);
 }
 
 function prevQ(){
+  if(advTimer){ clearTimeout(advTimer); advTimer=null; }
   if(cur===0) return;
   cur--;
   renderQ();
 }
 
 function next(){
+  if(advTimer){ clearTimeout(advTimer); advTimer=null; }
   if(ans[cur] === undefined) return;
   cur++;
   if(cur >= QUESTIONS.length){ finish(); return; }
@@ -465,6 +472,7 @@ function next(){
 }
 
 function finish(){
+  if(advTimer){ clearTimeout(advTimer); advTimer=null; }
   // 防御：缺答则跳到该题
   for(let k=0;k<QUESTIONS.length;k++){
     if(ans[k]===undefined){ cur=k; renderQ(); return; }
