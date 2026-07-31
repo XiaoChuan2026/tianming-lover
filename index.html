@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>你适合什么样的恋人？｜天命情书</title>
+<title>你适合什么样的恋人？｜正缘</title>
 <style>
   :root{
     --bg1:#fff0f5; --bg2:#ffe2ee;
@@ -158,9 +158,9 @@ function start(){
   const app = document.getElementById('app');
   app.innerHTML = `
     <div class="start-card">
-      <div class="badge">天命情书 · 恋人匹配</div>
+      <div class="badge">正缘 · 恋人匹配</div>
       <div class="title" style="font-size:25px">你适合什么样的恋人？</div>
-      <p>从「亲密需求 / 情感表达 / 关系节奏 / 被呵护偏好 / 成长张力」五个维度，算出最契合你的恋人原型，并告诉你：为什么是你、TA 长什么样、你们在一起会怎样、你最怕什么、以及现实里怎么认出 TA。</p>
+      <p>从「亲密需求 / 情感表达 / 关系节奏 / 被呵护偏好 / 成长张力」五个维度，算出最契合你的恋人原型，并告诉你：你是这样的人、TA 长什么样、你们在一起会怎样、你最怕什么、以及现实里怎么认出 TA。</p>
       <button class="result-btn" onclick="renderQ()">开始测试</button>
     </div>`;
 }
@@ -243,24 +243,29 @@ function finish(){
   renderResult(sc, ans, ranked[0]);
 }
 
-function whyText(sc, ans, mainKey){
+function portrait(sc, ans, mainKey){
   const sorted = AXES.slice().sort((a,b)=> sc[b.k]-sc[a.k]);
-  const hi1 = sorted[0], hi2 = sorted[1], lo = sorted[4];
-  function pick(axis, wantHigh){
-    let best = null, score = null;
-    QUESTIONS.forEach((q,qi)=>{
-      if(q.axis !== axis) return;
-      const idx = ans[qi]; const opt = q.opts[idx]; if(!opt) return;
-      const v = opt.v[axis];
-      const s = wantHigh ? v : (100 - v);
-      if(score===null || s>score){ score = s; best = {q:q.q, t:opt.t}; }
-    });
-    return best;
+  const hi1 = sorted[0], hi2 = sorted[1];
+  // 收集 20 个选择，按"明显程度"(离中间值 50 越远越明显)排序，每维最多取 2 条，取最明显的 5 条
+  const picks = [];
+  QUESTIONS.forEach((q,qi)=>{
+    const idx = ans[qi]; const opt = q.opts[idx]; if(!opt) return;
+    const v = opt.v[q.axis];
+    picks.push({axis:q.axis, t:opt.t, ext:Math.abs(v-50)});
+  });
+  picks.sort((a,b)=> b.ext - a.ext);
+  const chosen = [], cnt = {};
+  for(const p of picks){
+    cnt[p.axis] = cnt[p.axis] || 0;
+    if(cnt[p.axis] < 2 && chosen.length < 5){ chosen.push(p); cnt[p.axis]++; }
   }
-  const h1 = pick(hi1.k, true), h2 = pick(hi2.k, true), l = pick(lo.k, false);
-  let s = `你的关系画像里，<b>${hi1.label} ${sc[hi1.k]}</b> 与 <b>${hi2.label} ${sc[hi2.k]}</b> 最突出：`;
-  s += `你在「${h1.q}」选了「${h1.t}」；在「${h2.q}」选了「${h2.t}」。`;
-  s += `而 <b>${lo.label} ${sc[lo.k]}</b> 偏低——你在「${l.q}」选了「${l.t}」。这几笔，正好勾出「${TYPES[mainKey].type}」的你。`;
+  const conn = ['你', '你', '你也', '说到底，你', '在感情里，你'];
+  let s = `综合你 20 道题的真实选择，你是一个 <b>${hi1.label} ${sc[hi1.k]}</b>、<b>${hi2.label} ${sc[hi2.k]}</b> 的人——`;
+  chosen.forEach((p,i)=>{
+    let t = p.t.replace(/[。．.!！?？~～\s]+$/,'');
+    s += `${conn[i]}${t}。`;
+  });
+  s += `这些拼在一起，就是「${TYPES[mainKey].type}」的你。`;
   return s;
 }
 
@@ -283,7 +288,7 @@ function renderResult(sc, ans, main){
   const app = document.getElementById('app');
   let html = `
     <div class="r-head">
-      <div class="r-badge">天命情书 · 你的恋人原型</div>
+      <div class="r-badge">正缘 · 你的恋人原型</div>
       <div class="r-name">${T.type}</div>
       <div class="r-nick">${T.nick}</div>
       <div class="r-tag">${T.tag}</div>
@@ -294,8 +299,8 @@ function renderResult(sc, ans, main){
     <div class="sec-sub">五项维度由你的真实作答算出，是这份匹配的依据：</div>
     ${barsHTML(sc)}
 
-    <div class="sec-title">为什么是你</div>
-    <div class="card why">${whyText(sc, ans, main.key)}</div>
+    <div class="sec-title">你是这样的人</div>
+    <div class="card why">${portrait(sc, ans, main.key)}</div>
 
     <div class="sec-title">TA 是什么样的恋人</div>
     <div class="card">${T.desc}</div>
